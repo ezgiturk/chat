@@ -1,0 +1,48 @@
+{% load staticfiles %}{% load static %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <link rel="shortcut icon" href="//www.twilio.com/marketing/bundles/marketing/img/favicons/favicon.ico">#}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'mainApp/style.css' %}">
+
+    {% block style %}{% endblock %}
+
+
+    <title>{% block title %}Django Auth Tutorial{% endblock %}</title>
+</head>
+<body>
+    <section class="hero is-info">
+        <div class="hero-body has-text-centered">
+            <div class="container">
+                <h1 class="title is-2">
+                    ChatMe
+                </h1>
+                <h2 class="subtitle is-5">
+                    An exploration into ChatMe Programmable Chat.
+                    <br/> Join one of the rooms below to start your adventure
+                </h2>
+            </div>
+        </div>
+    </section>
+    <ul class="sidebar-nav">
+
+
+        {% if user.is_authenticated %}
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+
+        {% else %}
+            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+        {% endif %}
+
+    </ul>
+        {% block content %}
+        {% endblock %}
+</body>
+</html>

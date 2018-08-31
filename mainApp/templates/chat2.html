@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div>
+    <div align="right">
+        <form action="{% url 'create_group' %}">
+
+          <input type="submit" value="Create Group">
+        </form>
+
+
+    </div>
+    <div>
+        <p>All Groups: </p>
+{#        {% if groups %}#}
+{#            {% for group in groups %}#}
+{#                <li>#}
+{#                    <a href="{% url 'group_profile' group.chat.group_name %}">{{ group.chat.group_name }}</a>#}
+{##}
+{#                </li>#}
+{#            {% endfor%}#}
+{#        {% endif %}#}
+
+        <p>All users:</p>
+
+        <ul>
+        Checkbox: <input type="checkbox" id="myCheck"  onclick="myFunction()">
+        <p id="text" style="display:none">Checkbox is CHECKED!</p>
+            {% for user in all_user %}
+                <li>
+
+                    <a href="{% url 'profile' user.username %}">{{ user.username  }}</a>
+                    {% for user_key, number_message in context.items %}
+                        {% if  user_key  == user.username and number_message != 0%}
+                            ({{number_message}})
+                        {% endif %}
+                    {% endfor %}
+                </li>
+            {% endfor%}
+
+        </ul>
+        <script>
+        function myFunction() {
+
+            var checkBox = document.getElementById("myCheck");
+            var text = document.getElementById("text");
+            if (checkBox.checked === true){
+                text.style.display = "block";
+            } else {
+               text.style.display = "none";
+            }
+        }
+        </script>
+
+
+        <input type="submit" value="Add user">
+
+    </div>
+
+</div>
+
+{% endblock %}

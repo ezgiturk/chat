@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Profile</h1>
+        <p>Username: {{ user.username }}</p>
+        <p>Website: {{ user_profile.website }}</p>
+        <p>Description: {{ user_profile.description }}</p>
+        <p>Phone: {{ user_profile.phone }}</p>
+        <p>City: {{ user_profile.city }}</p>
+        <p>Email: {{ user.email }}</p>
+        {% if user_profile.image %}
+          <img src="{{ user_profile.image.url }}" class="img-responsive" width="200">
+        {% endif %}
+
+    </div>
+
+    <div>
+        <a href="{% url 'edit_profile' %}" class="button">Edit Profile</a>
+    </div>
+
+
+{% endblock %}

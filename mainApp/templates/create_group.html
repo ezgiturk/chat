@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% block head %}
+    <script type="text/javascript">
+    function val() {
+        var chks = document.getElementsByName('user[]');
+        var hasChecked = false;
+        for(var i = 0; i<chks.length; i++)
+        {
+            if (chks[i].checked){
+                hasChecked = true;
+                break;
+            }
+        }
+        if(hasChecked == false)
+        {
+            alert("Please select at least one person");
+            return false;
+        }
+        return true;
+    }
+    </script>
+
+{#    </ul>#}
+
+{% endblock %}
+{% block style %}
+
+{% endblock %}
+
+
+{% block content %}
+<div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+    <script src="inputhttp://code.jquery.com/ui/1.9.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#users').multiselect({
+                includeSelectAllOption: true
+            });
+
+        });
+    </script>
+
+    <form method="post" action="/group_chat/">
+        {% csrf_token %}
+        <select id="users" multiple="multiple" name="users[]">
+            {% for user in all_user %}
+
+                <option value="{{ user.username }}">{{ user.username }}</option><br>
+
+            {% endfor%}
+        </select>
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+<div>
+
+{#    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names.." title="Type in a name">#}
+{##}
+{#    <ul id="myUL">#}
+{#        {% for user in all_user %}#}
+{#            <li>#}
+{#                <a href="{% url 'profile' user.username %}">{{ user.username }}</a>#}
+{#            </li>#}
+{#        {% endfor%}#}
+{##}
+{#    </ul>#}
+
+{#    <br><h2>All Users : </h2><br>#}
+{##}
+{#    <form method="post" action="/">#}
+{#    <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names.." title="Type in a name">#}
+{#    <ul id="myUL">#}
+{#        {% for user in all_user %}#}
+{#            <input type="checkbox" name="user[]" value="{{ user.username }}">{{ user.username }}<br>#}
+{##}
+{#        {% endfor%}#}
+{#        <button type="button" onclick="return val ();">Add</button>#}
+{##}
+{#    </ul>#}
+{#    </form>#}
+
+    <script>
+    function searchFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("myUL");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+    </script>
+</div>
+
+
+<div>
+    <form method="post" action="/save_group/">
+        {% csrf_token %}
+            <div id="checkboxlist" >
+
+                {% for user in all_user %}
+                    <ul id="myUL">
+                    {% if user.username != request.user.username %}
+
+                        <li><input name="users[]" type="checkbox" value="{{ user.username }}" class="chk"> {{ user.username }}</li>
+                    {% endif %}
+                    </ul>
+                {% endfor%}
+                <h3>Enter Group Name :</h3>
+                <input name = group_name type="text">
+
+
+                <button type="submit">Add</button>
+            </div>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
+{#{% block content %}#}
+{##}
+{#    <div class="container">#}
+{#        {% for user in all_user %}#}
+{#            <input type="checkbox" class="check" value="{{ user.username }}">{{ user.username }}"<br>#}
+{##}
+{#        {% endfor%}#}
+{#        <a href="#" onclick="getValue(all_user.length);return false;">Get Value</a>#}
+{##}
+{##}
+{##}
+{#        <script>#}
+{#            function getValue(size)  {#}
+{#                var checks = document.getElementsByClassName('checks');#}
+{#                var str = '';#}
+{##}
+{#                for( i = 0; i < 2; i++){#}
+{#                    if(checks[i].checked === true){#}
+{#                        str += checks[i].value + '';#}
+{#                    }#}
+{#                }#}
+{#                alert(str);#}
+{#            }#}
+{#        </script>#}
+{##}
+{#      </div>#}
+{#{% endblock %}#}

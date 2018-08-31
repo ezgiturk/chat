@@ -1,0 +1,144 @@
+{% extends 'chat_base.html' %}
+
+    {% if last_message and last_message != old_message %}
+        <script type='text/javascript'>
+            function updateDiv()
+            {
+                document.getElementById("frame").innerHTML = document.getElementById("frame").innerHTML ;
+            }
+        </script>
+    {% endif %}
+
+{% block body %}
+
+<div id="frame">
+	<div id="sidepanel">
+		<div id="profile">
+			<div class="wrap">
+				<img id="profile-img" src="http://emilcarlsson.se/assets/mikeross.png" class="online" alt="" />
+				<p>{{ user.username }}</p>
+				<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
+				<div id="status-options">
+					<ul>
+						<li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>
+						<li id="status-away"><span class="status-circle"></span> <p>Away</p></li>
+						<li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>
+						<li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>
+					</ul>
+				</div>
+				<div id="expanded">
+					<label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>
+					<input name="twitter" type="text" value="mikeross" />
+					<label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>
+					<input name="twitter" type="text" value="ross81" />
+					<label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>
+					<input name="twitter" type="text" value="mike.ross" />
+				</div>
+			</div>
+		</div>
+		<div id="search">
+			<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
+			<input type="text" placeholder="Search contacts..." />
+		</div>
+		<div id="contacts">
+			<ul>
+                {% for group in groups %}
+                    <li class="contact">
+                        <div class="wrap">
+                            <span class="contact-status online"></span>
+                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                            <div class="meta">
+{#                                <button class="name" onclick="location.href={% url 'group_profile' group.chat.group_name %}">{{ group.chat.group_name }} </button>#}
+                                <a href="{% url 'group_profile' group.chat.group_name %}">{{ group.chat.group_name }}</a>
+
+                                <p class="preview">You just got LITT up, Mike.</p>
+                                <small>Lorem ipsum dolor sit amet...</small>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+
+                {% for user in all_users %}
+                    {% if user != request.user.username %}
+                        <li class="contact">
+                            <div class="wrap">
+                                <span class="contact-status online"></span>
+{#                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />#}
+                                {% if user_profile.image %}
+                                    <img src="{{ user_profile.image.url }}" alt=""/>
+                                {% endif %}
+                                <div class="meta">
+{#                                    <button class="name" onclick="location.href={% url 'profile' user.username %}">{{ user.username }} </button>#}
+                                    <a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+                                    {% for user_key, number_message in context.items %}
+                                        {% if  user_key  == user.username and number_message != 0%}
+                                            ({{number_message}})
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    <p class="preview">You just got LITT up, Mike.</p>
+                                    <small>Lorem ipsum dolor sit amet...</small>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+
+                {% endfor %}
+
+			</ul>
+		</div>
+		<div id="bottom-bar">
+			<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+			<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
+		</div>
+	</div>
+	<div class="content">
+		<div class="contact-profile">
+			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+			<p>{{ friend_name }}</p>
+			<div class="social-media">
+				<i class="fa fa-facebook" aria-hidden="true"></i>
+				<i class="fa fa-twitter" aria-hidden="true"></i>
+				 <i class="fa fa-instagram" aria-hidden="true"></i>
+			</div>
+		</div>
+		<div class="messages">
+			<ul>
+                {% for mesaj in mesajlar %}
+                    {% if mesaj.user.username == user.username %}
+                         <li class="replies">
+                            <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+                            <p>{{ mesaj.user.username }} {{ mesaj.message }}</p>
+                            <small>{{ mesaj.date }}</small>
+
+                        </li>
+
+                    {% else %}
+                        <li class="sent">
+                            <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+                            <p>{{ mesaj.user.username }} {{ mesaj.message }}</p>
+                            <small>{{ mesaj.date }}</small>
+
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="msg-day"><small>Wednesday</small></li>
+			</ul>
+		</div>
+
+		<div class="message-input">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="wrap">
+                    <input type="text" name="message" placeholder="type here..."><br>
+                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                    <button class="submit" type="submit" value="Send"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                </div>
+
+            </form>
+		</div>
+	</div>
+</div>
+{% endblock %}
